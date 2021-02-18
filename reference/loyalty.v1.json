@@ -1,0 +1,2841 @@
+{
+  "tags": [
+    {
+      "name": "Member APIs",
+      "description": "Member Controller V 2"
+    },
+    {
+      "name": "reconciliation-reports",
+      "description": "Báo cáo đối soát"
+    },
+    {
+      "name": "tier-config",
+      "description": "Tier config cho network"
+    },
+    {
+      "name": "tier",
+      "description": "Tier cho từng network"
+    },
+    {
+      "name": "transactions-v2",
+      "description": "Tier cho từng network"
+    }
+  ],
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Loyalty Offchain API",
+    "version": "1.0",
+    "description": "REST API for Loyalty Offchain",
+    "contact": {
+      "name": "Loyalty team",
+      "url": "https://loyalty.test-1.tekoapis.net",
+      "email": "loyalty@teko.vn"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://loyalty.test-1.tekoapis.net"
+    }
+  ],
+  "paths": {
+    "/api/v2/members/points": {
+      "post": {
+        "summary": "",
+        "tags": [
+          "Member APIs"
+        ],
+        "operationId": "post-api-v2-members-points",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "execution_time": {
+                      "type": "number"
+                    },
+                    "result": {
+                      "type": "object",
+                      "required": [
+                        "point",
+                        "status",
+                        "status_text",
+                        "tier_name",
+                        "tier_point"
+                      ],
+                      "properties": {
+                        "point": {
+                          "type": "number"
+                        },
+                        "status": {
+                          "type": "number"
+                        },
+                        "status_text": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "tier_name": {
+                          "type": "string"
+                        },
+                        "tier_point": {
+                          "type": "number"
+                        }
+                      }
+                    },
+                    "extra": {
+                      "type": "object",
+                      "required": [
+                        "response_id",
+                        "checksum"
+                      ],
+                      "properties": {
+                        "response_id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "checksum": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "execution_time",
+                    "result",
+                    "extra"
+                  ]
+                },
+                "examples": {
+                  "example-reponse": {
+                    "value": {
+                      "code": "00",
+                      "message": "Successful",
+                      "execution_time": 234,
+                      "result": {
+                        "point": 0,
+                        "status": 1,
+                        "status_text": "ACTIVE",
+                        "tier_name": "Vàng",
+                        "tier_point": 123
+                      },
+                      "extra": {
+                        "response_id": "152666381779922944",
+                        "checksum": "5f56d479a48716c8b8c3cc8894835654b8847db09f133a6cd9bc3df4faaf7df5"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "API Lấy thông tin điểm tương ứng của Member, trả về số điểm hiện tại và điểm tích lũy thăng hạng, loại phân hạng hiện tại của member",
+        "security": [
+          {
+            "x-client-id": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "",
+                "type": "object",
+                "properties": {
+                  "member_id": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "maxLength": 15,
+                    "minLength": 0
+                  },
+                  "request_id": {
+                    "type": "string",
+                    "minLength": 5,
+                    "maxLength": 36
+                  }
+                },
+                "required": [
+                  "request_id"
+                ]
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "member_id": "2342349827348233",
+                    "phone": "0393227444",
+                    "request_id": "request_id_234234242"
+                  }
+                }
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "description": "",
+                "type": "object",
+                "properties": {
+                  "member_id": {
+                    "type": "number",
+                    "description": "Mã khách hàng tại Loyalty"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 15,
+                    "description": "Số điện thoại, theo định dạng của VN (không có +84)"
+                  },
+                  "request_id": {
+                    "type": "string",
+                    "description": "Mã định danh cho request tới Loyalty",
+                    "maxLength": 36,
+                    "minLength": 5
+                  }
+                },
+                "required": [
+                  "member_id",
+                  "phone",
+                  "request_id"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/v1/reconciliation-reports": {
+      "post": {
+        "tags": [
+          "reconciliation-reports"
+        ],
+        "summary": "Tạo yêu cầu đối soát",
+        "operationId": "post-admin-v1-reconciliation-report",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "result": {
+                      "type": "number",
+                      "description": "Số yêu cầu đối soát được tạo (tương ứng với số merchant gửi lên)"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "result"
+                  ]
+                },
+                "examples": {
+                  "created-success": {
+                    "value": {
+                      "code": "00",
+                      "message": "Success",
+                      "result": 5
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error_InvalidDataResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error_NoPermissionResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error_NotFoundDataResponse"
+          },
+          "501": {
+            "$ref": "#/components/responses/Error_FailedToExecuteResponse"
+          }
+        },
+        "description": "Tạo yêu cầu đối soát",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "network_id": {
+                    "type": "number",
+                    "example": 1,
+                    "description": "Network Id"
+                  },
+                  "merchant_codes": {
+                    "type": "array",
+                    "example": [
+                      "vnshop_online"
+                    ],
+                    "description": "Merchant Code",
+                    "minItems": 1,
+                    "maxItems": 50,
+                    "items": {
+                      "type": "string",
+                      "pattern": "^[a-zA-Z\\\\d_-]+$",
+                      "minLength": 1,
+                      "maxLength": 50
+                    }
+                  },
+                  "from_date": {
+                    "type": "string",
+                    "description": "Ngày bắt đầu đối soát. Format: yyyymmdd",
+                    "minLength": 8,
+                    "maxLength": 8,
+                    "example": "20210126"
+                  },
+                  "to_date": {
+                    "type": "string",
+                    "description": "Ngày kết thúc đối soát. Format: yyyymmdd",
+                    "example": "20210126",
+                    "minLength": 8,
+                    "maxLength": 8
+                  }
+                },
+                "required": [
+                  "network_id",
+                  "merchant_codes",
+                  "from_date",
+                  "to_date"
+                ]
+              },
+              "examples": {
+                "example": {
+                  "value": {
+                    "network_id": 1,
+                    "merchant_codes": [
+                      "vnshop_online"
+                    ],
+                    "from_date": "20210126",
+                    "to_date": "20210126"
+                  }
+                }
+              }
+            }
+          },
+          "description": ""
+        },
+        "parameters": [],
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      },
+      "get": {
+        "summary": "Lấy danh sách yêu cầu đối soát",
+        "tags": [
+          "reconciliation-reports"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "result": {
+                      "type": "object",
+                      "required": [
+                        "reconciliation_reports"
+                      ],
+                      "properties": {
+                        "reconciliation_reports": {
+                          "type": "array",
+                          "uniqueItems": true,
+                          "minItems": 1,
+                          "items": {
+                            "$ref": "#/components/schemas/ReconciliationReport"
+                          }
+                        }
+                      }
+                    },
+                    "extra": {
+                      "$ref": "../models/ExtraDataSearch.json"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "result",
+                    "extra"
+                  ]
+                },
+                "examples": {
+                  "example": {
+                    "value": {
+                      "code": "string",
+                      "message": "string",
+                      "result": {
+                        "reconciliation_reports": [
+                          {
+                            "id": 1,
+                            "name": "string",
+                            "from_date": 1612860751693,
+                            "to_date": 1612860751693,
+                            "status": "RECONCILIATION",
+                            "file_name": "reconciliation.xlsx",
+                            "gcs_file_name": "reconciliation_3434392842394.xlsx",
+                            "created_at": 1612860751693,
+                            "created_by": "quy.tm@teko.vn",
+                            "updated_at": 1612860751693,
+                            "updated_by": "quy.tm@teko.vn"
+                          }
+                        ]
+                      },
+                      "extra": {
+                        "current_page": 0,
+                        "total_page": 0,
+                        "total_items": 0,
+                        "page_size": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error_InvalidDataResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error_NoPermissionResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error_NotFoundDataResponse"
+          }
+        },
+        "operationId": "get-admin-v2-reconciliation-reports",
+        "description": "Lấy danh sách yêu cầu đối soát",
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 11
+            },
+            "in": "query",
+            "name": "network_id",
+            "description": "Filter theo network"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-zA-Z\\\\d_-]+$",
+              "minLength": 1,
+              "maxLength": 50
+            },
+            "in": "query",
+            "name": "merchant_code",
+            "description": "Filter theo merchant (require network_id)"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 8,
+              "example": "20210126"
+            },
+            "in": "query",
+            "name": "from_date",
+            "description": "Tìm các báo cáo từ ngày. Format: yyyymmdd"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 8,
+              "example": "20210126"
+            },
+            "in": "query",
+            "name": "to_date",
+            "description": "Tìm các báo cáo tới ngày. Format: yyyymmdd"
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "/admin/v1/reconciliation-reports/{report_id}/download": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "report_id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Tải xuống file báo cáo đối soát",
+        "tags": [
+          "reconciliation-reports"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error_InvalidDataResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error_NoPermissionResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error_NotFoundDataResponse"
+          }
+        },
+        "operationId": "get-admin-v1-reconciliation-reports-report_id-download",
+        "description": "Tải xuống file báo cáo đối soát",
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/admin/v1/reconciliation-reports/{report_id}/confirm": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "report_id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "put": {
+        "summary": "Đánh dấu đối soát",
+        "tags": [
+          "reconciliation-reports"
+        ],
+        "operationId": "put-admin-v1-reconciliation-report-id-confirm",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "result": {
+                      "type": "object",
+                      "required": [
+                        "reconciliation_report"
+                      ],
+                      "properties": {
+                        "reconciliation_report": {
+                          "$ref": "#/components/schemas/ReconciliationReport"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "result"
+                  ]
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "code": "string",
+                      "message": "string",
+                      "result": {
+                        "reconciliation_report": {
+                          "id": 1,
+                          "name": "string",
+                          "from_date": 1612860751693,
+                          "to_date": 1612860751693,
+                          "status": "RECONCILIATION",
+                          "file_name": "reconciliation.xlsx",
+                          "gcs_file_name": "reconciliation_3434392842394.xlsx",
+                          "created_at": 1612860751693,
+                          "created_by": "quy.tm@teko.vn",
+                          "updated_at": 1612860751693,
+                          "updated_by": "quy.tm@teko.vn"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              },
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Error_NoPermissionResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error_NotFoundDataResponse"
+          },
+          "501": {
+            "$ref": "#/components/responses/Error_FailedToExecuteResponse"
+          }
+        },
+        "description": "Đánh dấu đối soát",
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {}
+            }
+          },
+          "description": ""
+        }
+      }
+    },
+    "/admin/v1/tier-configs": {
+      "get": {
+        "summary": "Lấy danh sách Tier config của các networks",
+        "tags": [
+          "tier-config"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "extra": {
+                      "type": "object",
+                      "required": [
+                        "current_page",
+                        "page_size",
+                        "total_items",
+                        "total_page"
+                      ],
+                      "properties": {
+                        "current_page": {
+                          "type": "number"
+                        },
+                        "page_size": {
+                          "type": "number"
+                        },
+                        "total_items": {
+                          "type": "number"
+                        },
+                        "total_page": {
+                          "type": "number"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "result": {
+                      "type": "object",
+                      "required": [
+                        "tier-configs"
+                      ],
+                      "properties": {
+                        "tier-configs": {
+                          "uniqueItems": true,
+                          "minItems": 1,
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/TierConfig"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "extra",
+                    "message",
+                    "result"
+                  ]
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "code": "00",
+                      "extra": {
+                        "current_page": 1,
+                        "page_size": 10,
+                        "total_items": 120,
+                        "total_page": 12
+                      },
+                      "message": "Thành công",
+                      "result": {
+                        "tier-configs": [
+                          {
+                            "network_id": 1,
+                            "network_name": "Dino",
+                            "description": "Tier config for Dino",
+                            "status": 1,
+                            "cycle_type": "MONTH",
+                            "period": 6,
+                            "start_cycle_day": 1611634987499,
+                            "amount_rate": 10000,
+                            "point_rate": 1,
+                            "created_at": 1611634987499,
+                            "updated_at": 1611634987499,
+                            "created_by": "quy.tm@teko.vn",
+                            "updated_by": "quy.tm@teko.vn"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Error_NoPermissionResponse"
+          }
+        },
+        "operationId": "get-admin-v1-tier-configs",
+        "description": "Lấy danh sách Tier config của các networks",
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "Tạo cấu hình Tier cho network",
+        "tags": [
+          "tier-config"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "result": {
+                      "type": "object",
+                      "required": [
+                        "tier-config"
+                      ],
+                      "properties": {
+                        "tier-config": {
+                          "$ref": "#/components/schemas/TierConfig"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "result"
+                  ]
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "code": "00",
+                      "execution_time": 50,
+                      "message": "Thành công",
+                      "result": {
+                        "tier-config": {
+                          "network_id": 1,
+                          "network_name": "Dino",
+                          "description": "Tier config for Dino",
+                          "status": 1,
+                          "cycle_type": "MONTH",
+                          "period": 6,
+                          "start_cycle_day": 1611634987499,
+                          "amount_rate": 10000,
+                          "point_rate": 1,
+                          "created_at": 1611634987499,
+                          "updated_at": 1611634987499,
+                          "created_by": "quy.tm@teko.vn",
+                          "updated_by": "quy.tm@teko.vn"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error_InvalidDataResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error_NoPermissionResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error_NotFoundDataResponse"
+          },
+          "501": {
+            "$ref": "#/components/responses/Error_FailedToExecuteResponse"
+          }
+        },
+        "operationId": "post-admin-v1-tier-configs",
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "",
+                "type": "object",
+                "properties": {
+                  "network_id": {
+                    "type": "number"
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "cycle_type": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "period": {
+                    "type": "number"
+                  },
+                  "start_cycle_day": {
+                    "type": "number"
+                  },
+                  "amount_rate": {
+                    "type": "number"
+                  },
+                  "point_rate": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "network_id",
+                  "description",
+                  "cycle_type",
+                  "period",
+                  "start_cycle_day",
+                  "amount_rate",
+                  "point_rate"
+                ]
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "network_id": 1,
+                    "description": "Tier config for Dino",
+                    "cycle_type": "MONTH",
+                    "period": 6,
+                    "start_cycle_day": 1611634987499,
+                    "amount_rate": 10000,
+                    "point_rate": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Tạo cấu hình Tier cho network"
+      }
+    },
+    "/admin/v1/tier-configs/{id}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "Id của config (network_id)"
+        }
+      ],
+      "get": {
+        "summary": "Lấy thông tin chi tiết của Tier config của network",
+        "tags": [
+          "tier-config"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "result": {
+                      "type": "object",
+                      "required": [
+                        "tier-config"
+                      ],
+                      "properties": {
+                        "tier-config": {
+                          "$ref": "#/components/schemas/TierConfig"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "result"
+                  ]
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "code": "00",
+                      "message": "Thành công",
+                      "result": {
+                        "tier-config": {
+                          "network_id": 1,
+                          "network_name": "Dino",
+                          "description": "Tier config for Dino",
+                          "status": 1,
+                          "cycle_type": "MONTH",
+                          "period": 6,
+                          "start_cycle_day": 1611634987499,
+                          "amount_rate": 10000,
+                          "point_rate": 1,
+                          "created_at": 1611634987499,
+                          "updated_at": 1611634987499,
+                          "created_by": "quy.tm@teko.vn",
+                          "updated_by": "quy.tm@teko.vn"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error_InvalidDataResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error_NoPermissionResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error_NotFoundDataResponse"
+          }
+        },
+        "operationId": "get-admin-v1-tier-configs-network_id",
+        "description": "Lấy thông tin chi tiết của Tier config của network",
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Cập nhật Tier config cho network",
+        "tags": [
+          "tier-config"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "execution_time": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "result": {
+                      "type": "object",
+                      "required": [
+                        "tier-config"
+                      ],
+                      "properties": {
+                        "tier-config": {
+                          "$ref": "#/components/schemas/TierConfig"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "execution_time",
+                    "message",
+                    "result"
+                  ]
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "code": "00",
+                      "execution_time": 50,
+                      "message": "Thành công",
+                      "result": {
+                        "tier-config": {
+                          "network_id": 1,
+                          "network_name": "Dino",
+                          "description": "Tier config for Dino",
+                          "status": 1,
+                          "cycle_type": "MONTH",
+                          "period": 6,
+                          "start_cycle_day": 1611634987499,
+                          "amount_rate": 10000,
+                          "point_rate": 1,
+                          "created_at": 1611634987499,
+                          "updated_at": 1611634987499,
+                          "created_by": "quy.tm@teko.vn",
+                          "updated_by": "quy.tm@teko.vn"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error_InvalidDataResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error_NoPermissionResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error_NotFoundDataResponse"
+          },
+          "501": {
+            "$ref": "#/components/responses/Error_FailedToExecuteResponse"
+          }
+        },
+        "operationId": "put-admin-v1-tier-configs-network_id",
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "",
+                "type": "object",
+                "properties": {
+                  "description": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "cycle_type": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "period": {
+                    "type": "number"
+                  },
+                  "start_cycle_day": {
+                    "type": "string",
+                    "description": "Ngày bắt đầu chu kỳ. Format: yyyymmdd"
+                  },
+                  "amount_rate": {
+                    "type": "number"
+                  },
+                  "point_rate": {
+                    "type": "number"
+                  },
+                  "status": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "network_id": 1,
+                    "description": "Tier config for Dino",
+                    "cycle_type": "MONTH",
+                    "period": 6,
+                    "start_cycle_day": "20210126",
+                    "amount_rate": 10000,
+                    "point_rate": 1,
+                    "status": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Cập nhật Tier config cho network"
+      }
+    },
+    "/admin/v1/tier-configs/{id}/tiers": {
+      "get": {
+        "summary": "Lấy danh sách các Hạng thành viên của 1 network",
+        "tags": [
+          "tier"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "result": {
+                      "type": "object",
+                      "required": [
+                        "tiers"
+                      ],
+                      "properties": {
+                        "tiers": {
+                          "type": "array",
+                          "uniqueItems": true,
+                          "minItems": 1,
+                          "items": {
+                            "$ref": "#/components/schemas/Tier"
+                          }
+                        }
+                      }
+                    },
+                    "extra": {
+                      "$ref": "../models/ExtraDataSearch.json"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "result",
+                    "extra"
+                  ]
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "code": "string",
+                      "message": "string",
+                      "result": {
+                        "tiers": [
+                          {
+                            "network_id": 0,
+                            "code": "string",
+                            "name": "string",
+                            "description": "string",
+                            "status": 0,
+                            "from_point": 0,
+                            "to_point": 0,
+                            "keep_tier_time": 0,
+                            "keep_tier_rule": "string",
+                            "created_at": 0,
+                            "updated_at": 0,
+                            "created_by": "string",
+                            "updated_by": "string"
+                          }
+                        ]
+                      },
+                      "extra": {
+                        "current_page": 0,
+                        "page_size": 0,
+                        "total_items": 0,
+                        "total_page": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error_InvalidDataResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error_NoPermissionResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error_NotFoundDataResponse"
+          }
+        },
+        "operationId": "get-admin-v1-tiers",
+        "description": "Lấy danh sách các Hạng thành viên của 1 network",
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "number"
+            },
+            "in": "query",
+            "name": "network_id",
+            "description": "Network id"
+          }
+        ]
+      },
+      "post": {
+        "summary": "Tạo Hạng thành viên cho network",
+        "tags": [
+          "tier"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "result": {
+                      "type": "object",
+                      "required": [
+                        "tier"
+                      ],
+                      "properties": {
+                        "tier": {
+                          "$ref": "#/components/schemas/Tier"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "result"
+                  ]
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "code": "00",
+                      "message": "Thành công",
+                      "result": {
+                        "tier": {
+                          "network_id": 1,
+                          "code": "GOLD",
+                          "name": "Hạng Vàng",
+                          "description": "Thành viên hạng Vàng",
+                          "status": 1,
+                          "from_point": 1,
+                          "to_point": 10,
+                          "keep_tier_time": 6,
+                          "keep_tier_rule": "RESET",
+                          "created_at": 1611634987499,
+                          "updated_at": 1611634987499,
+                          "created_by": "quy.tm@teko.vn",
+                          "updated_by": "quy.tm@teko.vn"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error_InvalidDataResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error_NoPermissionResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error_NotFoundDataResponse"
+          },
+          "501": {
+            "$ref": "#/components/responses/Error_FailedToExecuteResponse"
+          }
+        },
+        "operationId": "post-admin-v1-tiers",
+        "description": "Tạo Hạng thành viên cho network",
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "",
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "from_point": {
+                    "type": "number"
+                  },
+                  "to_point": {
+                    "type": "number"
+                  },
+                  "keep_tier_time": {
+                    "type": "number"
+                  },
+                  "keep_tier_rule": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "code",
+                  "name",
+                  "description",
+                  "from_point",
+                  "to_point",
+                  "keep_tier_time",
+                  "keep_tier_rule"
+                ]
+              },
+              "examples": {
+                "example": {
+                  "value": {
+                    "code": "GOLD",
+                    "name": "Hạng Vàng",
+                    "description": "Thành viên hạng Vàng",
+                    "status": 1,
+                    "from_point": 1,
+                    "to_point": 10,
+                    "keep_tier_time": 6,
+                    "keep_tier_rule": "RESET"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "Id của Tier config (network_id)"
+        }
+      ]
+    },
+    "/admin/v1/tier-configs/{id}/tiers/{code}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "Id của Tier config"
+        },
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "code",
+          "in": "path",
+          "required": true,
+          "description": "Mã hạng thành viên"
+        }
+      ],
+      "get": {
+        "summary": "Chi tiết hạng thành viên",
+        "tags": [
+          "tier"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "result": {
+                      "type": "object",
+                      "required": [
+                        "tier"
+                      ],
+                      "properties": {
+                        "tier": {
+                          "$ref": "#/components/schemas/Tier"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "result"
+                  ]
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "code": "00",
+                      "message": "Thành công",
+                      "result": {
+                        "tier": {
+                          "network_id": 1,
+                          "code": "GOLD",
+                          "name": "Hạng Vàng",
+                          "description": "Thành viên hạng Vàng",
+                          "status": 1,
+                          "from_point": 1,
+                          "to_point": 10,
+                          "keep_tier_time": 6,
+                          "keep_tier_rule": "RESET",
+                          "created_at": 1611634987499,
+                          "updated_at": 1611634987499,
+                          "created_by": "quy.tm@teko.vn",
+                          "updated_by": "quy.tm@teko.vn"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error_InvalidDataResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error_NoPermissionResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error_NotFoundDataResponse"
+          },
+          "501": {
+            "$ref": "#/components/responses/Error_FailedToExecuteResponse"
+          }
+        },
+        "operationId": "get-admin-v1-tier-configs-id-tiers-code",
+        "description": "Chi tiết hạng thành viên",
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Cập nhật thông tin hạng thành viên",
+        "tags": [
+          "tier"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "result": {
+                      "type": "object",
+                      "required": [
+                        "tier"
+                      ],
+                      "properties": {
+                        "tier": {
+                          "$ref": "#/components/schemas/Tier"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "result"
+                  ]
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "code": "00",
+                      "message": "Thành công",
+                      "result": {
+                        "tier": {
+                          "network_id": 1,
+                          "code": "GOLD",
+                          "name": "Hạng Vàng",
+                          "description": "Thành viên hạng Vàng",
+                          "status": 1,
+                          "from_point": 1,
+                          "to_point": 10,
+                          "keep_tier_time": 6,
+                          "keep_tier_rule": "RESET",
+                          "created_at": 1611634987499,
+                          "updated_at": 1611634987499,
+                          "created_by": "quy.tm@teko.vn",
+                          "updated_by": "quy.tm@teko.vn"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error_InvalidDataResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error_NoPermissionResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error_NotFoundDataResponse"
+          },
+          "501": {
+            "$ref": "#/components/responses/Error_FailedToExecuteResponse"
+          }
+        },
+        "operationId": "put-admin-v1-tier-configs-id-tiers-code",
+        "description": "Cập nhật thông tin hạng thành viên",
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "",
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "status": {
+                    "type": "number"
+                  },
+                  "from_point": {
+                    "type": "number"
+                  },
+                  "to_point": {
+                    "type": "number"
+                  },
+                  "keep_tier_time": {
+                    "type": "number"
+                  },
+                  "keep_tier_rule": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "name",
+                  "description",
+                  "status",
+                  "from_point",
+                  "to_point",
+                  "keep_tier_time",
+                  "keep_tier_rule"
+                ]
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "name": "Hạng Vàng",
+                    "description": "Thành viên hạng Vàng",
+                    "status": 1,
+                    "from_point": 1,
+                    "to_point": 10,
+                    "keep_tier_time": 6,
+                    "keep_tier_rule": "RESET"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/v2/transactions/spend-points": {
+      "get": {
+        "summary": "Get transactions spend points",
+        "tags": [
+          "transactions-v2"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "result": {
+                      "type": "object",
+                      "required": [
+                        "txn_spend_points"
+                      ],
+                      "properties": {
+                        "txn_spend_points": {
+                          "type": "array",
+                          "uniqueItems": true,
+                          "minItems": 1,
+                          "items": {
+                            "$ref": "#/components/schemas/TxnSpendPoint"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "result"
+                  ]
+                },
+                "examples": {
+                  "example": {
+                    "value": {
+                      "code": "00",
+                      "message": "Success",
+                      "result": {
+                        "txn_spend_points": [
+                          {
+                            "txn_req_id": "12323213421",
+                            "ref_id": "234247298",
+                            "created_at": 12313123141243,
+                            "order_code": "order123",
+                            "spend_point": 123,
+                            "status": 1,
+                            "created_by": "quy.tm@teko.vn",
+                            "reconciliation_file": "rec.csv",
+                            "reconciliation_gcs_file": "rec_234723843289.csv",
+                            "merchant": {
+                              "id": "213412432",
+                              "merchant_code": "vnshop",
+                              "name": "Vnshop",
+                              "status": 0,
+                              "network_id": 0,
+                              "network_name": "string"
+                            },
+                            "terminal": {
+                              "id": "1",
+                              "name": "Vinmart Hoàng Cầu",
+                              "address": "36 Hoàng Cầu, Ô Chợ Dừa, Đống Đa, Hà Nội"
+                            },
+                            "member": {
+                              "id": "23123123123",
+                              "email": "quy.tm@teko.vn",
+                              "name": "Trần Minh Quý",
+                              "phone": "0393227489",
+                              "external_id": "SDFSDFJSLFJLDJ"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error_InvalidDataResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error_NoPermissionResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error_NotFoundDataResponse"
+          }
+        },
+        "operationId": "get-admin-v2-transactions-spend-points",
+        "description": "Get transactions spend points",
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer"
+            },
+            "in": "query",
+            "name": "network_id",
+            "description": "Filter by Network Id"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "merchant_code",
+            "description": "Filter by Merchant Code"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "terminal_code",
+            "description": "Filter by Terminal code"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "from_date",
+            "description": "Filter from date"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "to_date",
+            "description": "Filter to date"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "order_code",
+            "description": "Filter by Order code"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "phone",
+            "description": "Filter by Phone"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "status",
+            "description": "Filter by Status"
+          },
+          {
+            "schema": {
+              "type": "boolean"
+            },
+            "in": "query",
+            "name": "is_reconciliation",
+            "description": "Filter by Reconciliation status "
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "example": 1
+            },
+            "in": "query",
+            "name": "page",
+            "description": "Page index"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "example": 10
+            },
+            "in": "query",
+            "name": "size",
+            "description": "Page size"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "sort",
+            "description": "Sort by field"
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "/admin/v2/transactions/statements": {
+      "get": {
+        "summary": "Merchant - Network statement",
+        "tags": [
+          "transactions-v2"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "result": {
+                      "type": "object",
+                      "required": [
+                        "txn_statements"
+                      ],
+                      "properties": {
+                        "txn_statements": {
+                          "type": "array",
+                          "uniqueItems": true,
+                          "minItems": 1,
+                          "items": {
+                            "$ref": "#/components/schemas/TxnStatement"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "result"
+                  ]
+                },
+                "examples": {
+                  "example": {
+                    "value": {
+                      "code": "00",
+                      "message": "Success",
+                      "result": {
+                        "txn_statements": [
+                          {
+                            "txn_req_id": "12323213421",
+                            "ref_id": "234247298",
+                            "created_at": 12313123141243,
+                            "order_code": "order123",
+                            "point": 123,
+                            "status": 1,
+                            "created_by": "quy.tm@teko.vn",
+                            "reconciliation_file": "rec.csv",
+                            "merchant": {
+                              "id": "213412432",
+                              "merchant_code": "vnshop",
+                              "name": "Vnshop",
+                              "status": 0,
+                              "network_id": 0,
+                              "network_name": "string"
+                            },
+                            "terminal": {
+                              "id": "1",
+                              "name": "Vinmart Hoàng Cầu",
+                              "address": "36 Hoàng Cầu, Ô Chợ Dừa, Đống Đa, Hà Nội"
+                            },
+                            "member": {
+                              "id": "23123123123",
+                              "email": "quy.tm@teko.vn",
+                              "name": "Trần Minh Quý",
+                              "phone": "0393227489",
+                              "external_id": "SDFSDFJSLFJLDJ"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error_InvalidDataResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error_NoPermissionResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error_NotFoundDataResponse"
+          }
+        },
+        "operationId": "get-admin-v2-transactions-statement",
+        "description": "Merchant statement",
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "MERCHANT_ACC_STATEMENT",
+              "enum": [
+                "MERCHANT_ACC_STATEMENT",
+                "NETWORK_SUM_ACC_STATEMENT",
+                "NETWORK_PROMO_ACC_STATEMENT"
+              ]
+            },
+            "in": "query",
+            "name": "statement_type",
+            "description": "Type of statement.",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "integer"
+            },
+            "in": "query",
+            "name": "network_id",
+            "description": "Filter by Network Id"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "merchant_code",
+            "description": "Filter by Merchant Code"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "terminal_code",
+            "description": "Filter by Terminal code"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "from_date",
+            "description": "Filter from date"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "to_date",
+            "description": "Filter to date"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "order_code",
+            "description": "Filter by Order code"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "phone",
+            "description": "Filter by Phone"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "status",
+            "description": "Filter by Status"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "type",
+            "description": "Filter by Transaction type"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "example": 1
+            },
+            "in": "query",
+            "name": "page",
+            "description": "Page index"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "example": 10
+            },
+            "in": "query",
+            "name": "size",
+            "description": "Page size"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "sort",
+            "description": "Sort by field"
+          }
+        ]
+      },
+      "parameters": []
+    }
+  },
+  "components": {
+    "schemas": {
+      "ReconciliationReport": {
+        "description": "",
+        "type": "object",
+        "x-examples": {
+          "example-1": {
+            "id": 1,
+            "name": "string",
+            "from_date": 1612860751693,
+            "to_date": 1612860751693,
+            "status": "RECONCILIATION",
+            "file_name": "reconciliation.xlsx",
+            "gcs_file_name": "reconciliation_3434392842394.xlsx",
+            "created_at": 1612860751693,
+            "created_by": "quy.tm@teko.vn",
+            "updated_at": 1612860751693,
+            "updated_by": "quy.tm@teko.vn"
+          }
+        },
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "from_date": {
+            "type": "integer"
+          },
+          "to_date": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string"
+          },
+          "file_name": {
+            "type": "string"
+          },
+          "gcs_file_name": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "number"
+          },
+          "created_by": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "number"
+          },
+          "updated_by": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "from_date",
+          "to_date",
+          "status",
+          "file_name",
+          "gcs_file_name",
+          "created_at",
+          "created_by",
+          "updated_at",
+          "updated_by"
+        ]
+      },
+      "TierConfig": {
+        "description": "Model trả về thông tin của Tier Config",
+        "type": "object",
+        "properties": {
+          "network_id": {
+            "type": "number"
+          },
+          "network_name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "type": "number"
+          },
+          "cycle_type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "period": {
+            "type": "number"
+          },
+          "start_cycle_day": {
+            "description": "Ngày bắt đầu chu kỳ phân hạng. Timestamp UTC+0",
+            "type": "number"
+          },
+          "amount_rate": {
+            "type": "number",
+            "format": "float",
+            "description": "Số tiền giao dịch tương ứng với 1 điểm hạng thành viên"
+          },
+          "point_rate": {
+            "type": "number",
+            "description": "Số point tương ứng với 1 điểm hạng thành viên"
+          },
+          "created_at": {
+            "type": "number",
+            "description": "Timestamp UTC+0"
+          },
+          "updated_at": {
+            "type": "number",
+            "description": "Timestamp UTC+0"
+          },
+          "created_by": {
+            "type": "string"
+          },
+          "updated_by": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "network_id",
+          "network_name",
+          "description",
+          "status",
+          "cycle_type",
+          "period",
+          "start_cycle_day",
+          "amount_rate",
+          "point_rate",
+          "created_at",
+          "updated_at",
+          "created_by",
+          "updated_by"
+        ],
+        "x-examples": {
+          "example": {
+            "network_id": 1,
+            "network_name": "Dino",
+            "description": "Tier config for Dino",
+            "status": 1,
+            "cycle_type": "MONTH",
+            "period": 6,
+            "start_cycle_day": 1611634987499,
+            "amount_rate": 10000,
+            "point_rate": 1,
+            "created_at": 1611634987499,
+            "updated_at": 1611634987499,
+            "created_by": "quy.tm@teko.vn",
+            "updated_by": "quy.tm@teko.vn"
+          }
+        }
+      },
+      "Tier": {
+        "description": "",
+        "type": "object",
+        "properties": {
+          "network_id": {
+            "type": "number"
+          },
+          "code": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "type": "number"
+          },
+          "from_point": {
+            "type": "number"
+          },
+          "to_point": {
+            "type": "number"
+          },
+          "keep_tier_time": {
+            "type": "number"
+          },
+          "keep_tier_rule": {
+            "type": "string",
+            "minLength": 1
+          },
+          "created_at": {
+            "type": "number"
+          },
+          "updated_at": {
+            "type": "number"
+          },
+          "created_by": {
+            "type": "string",
+            "minLength": 1
+          },
+          "updated_by": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "network_id",
+          "code",
+          "name",
+          "description",
+          "status",
+          "from_point",
+          "to_point",
+          "keep_tier_time",
+          "keep_tier_rule",
+          "created_at",
+          "updated_at",
+          "created_by",
+          "updated_by"
+        ],
+        "x-examples": {
+          "example-1": {
+            "code": "GOLD",
+            "network_id": 1,
+            "name": "Hạng Vàng",
+            "description": "Thành viên hạng Vàng",
+            "status": 1,
+            "from_point": 1,
+            "to_point": 10,
+            "keep_tier_time": 6,
+            "keep_tier_rule": "RESET",
+            "created_at": 1611634987499,
+            "updated_at": 1611634987499,
+            "created_by": "quy.tm@teko.vn",
+            "updated_by": "quy.tm@teko.vn"
+          }
+        }
+      },
+      "TxnSpendPoint": {
+        "description": "Response for api get spend point txn",
+        "type": "object",
+        "x-examples": {
+          "example": {
+            "txn_req_id": "12323213421",
+            "ref_id": "234247298",
+            "created_at": 12313123141243,
+            "order_code": "order123",
+            "spend_point": 123,
+            "status": 1,
+            "created_by": "quy.tm@teko.vn",
+            "reconciliation_file": "rec.csv",
+            "reconciliation_gcs_file": "rec_23498237492.csv",
+            "merchant": {
+              "id": "213412432",
+              "merchant_code": "vnshop",
+              "name": "Vnshop",
+              "status": 0,
+              "network_id": 0,
+              "network_name": "string"
+            },
+            "terminal": {
+              "id": "1",
+              "name": "Vinmart Hoàng Cầu",
+              "address": "36 Hoàng Cầu, Ô Chợ Dừa, Đống Đa, Hà Nội"
+            },
+            "member": {
+              "id": "23123123123",
+              "email": "quy.tm@teko.vn",
+              "name": "Trần Minh Quý",
+              "phone": "0393227489",
+              "external_id": "SDFSDFJSLFJLDJ"
+            }
+          }
+        },
+        "title": "TxnSpendPoint",
+        "properties": {
+          "txn_req_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ref_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "created_at": {
+            "type": "number"
+          },
+          "order_code": {
+            "type": "string",
+            "minLength": 1
+          },
+          "spend_point": {
+            "type": "number"
+          },
+          "status": {
+            "type": "number"
+          },
+          "created_by": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reconciliation_file": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reconciliation_gcs_file": {
+            "type": "string",
+            "minLength": 1
+          },
+          "merchant": {
+            "$ref": "#/components/schemas/Merchant"
+          },
+          "terminal": {
+            "$ref": "#/components/schemas/Terminal"
+          },
+          "member": {
+            "$ref": "#/components/schemas/Member"
+          }
+        },
+        "required": [
+          "txn_req_id",
+          "ref_id",
+          "created_at",
+          "order_code",
+          "spend_point",
+          "status",
+          "created_by",
+          "reconciliation_file",
+          "reconciliation_gcs_file",
+          "merchant",
+          "terminal",
+          "member"
+        ]
+      },
+      "TxnStatement": {
+        "description": "Response for api get txn statement",
+        "type": "object",
+        "x-examples": {
+          "example": {
+            "txn_req_id": "12323213421",
+            "ref_id": "234247298",
+            "created_at": 12313123141243,
+            "order_code": "order123",
+            "point": 123,
+            "status": 1,
+            "created_by": "quy.tm@teko.vn",
+            "reconciliation_file": "rec.csv",
+            "merchant": {
+              "id": "213412432",
+              "merchant_code": "vnshop",
+              "name": "Vnshop",
+              "status": 0,
+              "network_id": 0,
+              "network_name": "string"
+            },
+            "terminal": {
+              "id": "1",
+              "name": "Vinmart Hoàng Cầu",
+              "address": "36 Hoàng Cầu, Ô Chợ Dừa, Đống Đa, Hà Nội"
+            },
+            "member": {
+              "id": "23123123123",
+              "email": "quy.tm@teko.vn",
+              "name": "Trần Minh Quý",
+              "phone": "0393227489",
+              "external_id": "SDFSDFJSLFJLDJ"
+            }
+          }
+        },
+        "title": "TxnStatement",
+        "properties": {
+          "txn_req_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ref_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "created_at": {
+            "type": "number"
+          },
+          "order_code": {
+            "type": "string",
+            "minLength": 1
+          },
+          "point": {
+            "type": "number"
+          },
+          "status": {
+            "type": "number"
+          },
+          "created_by": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reconciliation_file": {
+            "type": "string",
+            "minLength": 1
+          },
+          "merchant": {
+            "$ref": "#/components/schemas/Merchant"
+          },
+          "terminal": {
+            "$ref": "#/components/schemas/Terminal"
+          },
+          "member": {
+            "$ref": "#/components/schemas/Member"
+          }
+        },
+        "required": [
+          "txn_req_id",
+          "ref_id",
+          "created_at",
+          "order_code",
+          "point",
+          "status",
+          "created_by",
+          "reconciliation_file",
+          "merchant",
+          "terminal",
+          "member"
+        ]
+      },
+      "Terminal": {
+        "description": "Terminal info response",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "address": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "address"
+        ],
+        "x-examples": {
+          "example-1": {
+            "id": "1",
+            "name": "Vinmart Hoàng Cầu",
+            "address": "36 Hoàng Cầu, Ô Chợ Dừa, Đống Đa, Hà Nội"
+          }
+        },
+        "title": "Terminal"
+      },
+      "Merchant": {
+        "description": "Merchant info response",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "merchant_code": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "type": "number"
+          },
+          "network_id": {
+            "type": "number"
+          },
+          "network_name": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "merchant_code",
+          "name",
+          "status",
+          "network_id",
+          "network_name"
+        ],
+        "x-examples": {
+          "example-1": {
+            "id": "213412432",
+            "merchant_code": "vnshop",
+            "name": "Vnshop",
+            "status": 0,
+            "network_id": 0,
+            "network_name": "string"
+          }
+        },
+        "title": "Merchant"
+      },
+      "Member": {
+        "description": "Member info response",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "email": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "phone": {
+            "type": "string",
+            "minLength": 1
+          },
+          "external_id": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "name",
+          "phone",
+          "external_id"
+        ],
+        "title": "Member",
+        "x-examples": {
+          "example-1": {
+            "id": "23123123123",
+            "email": "quy.tm@teko.vn",
+            "name": "Trần Minh Quý",
+            "phone": "0393227489",
+            "external_id": "SDFSDFJSLFJLDJ"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "x-client-id": {
+        "name": "x-client-id",
+        "type": "apiKey",
+        "in": "header"
+      },
+      "Authorization": {
+        "name": "Authorizatioin",
+        "type": "apiKey",
+        "in": "header",
+        "description": ""
+      }
+    },
+    "responses": {
+      "Error_InvalidDataResponse": {
+        "description": "Response when data input is invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "example": {
+                "value": {
+                  "code": "01",
+                  "message": "Invalid network"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Error_NotFoundDataResponse": {
+        "description": "Response when data is not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "example": {
+                "value": {
+                  "code": "101",
+                  "message": "Not found Merchant in the system"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Error_LockedDataResponse": {
+        "description": "Response when data is locked or not active",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "example": {
+                "value": {
+                  "code": "105",
+                  "message": "Merchant is not active"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Error_FailedToExecuteResponse": {
+        "description": "Response when failed execute",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "example": {
+                "value": {
+                  "code": "207",
+                  "message": "Failed to execute"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Error_NoPermissionResponse": {
+        "description": "Response when no permission to access/request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "example": {
+                "value": {
+                  "code": "198",
+                  "message": "No permission to access"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "examples": {}
+  },
+  "security": [
+    {
+      "x-client-id": []
+    }
+  ]
+}
