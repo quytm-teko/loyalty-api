@@ -351,7 +351,7 @@
         ]
       },
       "get": {
-        "summary": "Lấy danh sách yêu cầu đối soát ----",
+        "summary": "Lấy danh sách yêu cầu đối soát",
         "tags": [
           "reconciliation-reports"
         ],
