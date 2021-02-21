@@ -290,9 +290,11 @@
                 "type": "object",
                 "properties": {
                   "network_id": {
-                    "type": "number",
+                    "type": "string",
                     "example": 1,
-                    "description": "Network Id"
+                    "description": "Network Id",
+                    "minLength": 1,
+                    "maxLength": 11
                   },
                   "merchant_codes": {
                     "type": "array",
@@ -493,6 +495,49 @@
             "in": "query",
             "name": "to_date",
             "description": "Tìm các báo cáo tới ngày. Format: yyyymmdd"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "EXPORTING",
+                "FAILED",
+                "WAITING",
+                "RECONCILED"
+              ],
+              "example": "RECONCILED"
+            },
+            "in": "query",
+            "name": "status",
+            "description": "Trạng thái đối soát"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "example": 1
+            },
+            "in": "query",
+            "name": "page",
+            "description": "Page index"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "example": 10
+            },
+            "in": "query",
+            "name": "size",
+            "description": "Page size"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "sort",
+            "description": "Sort by field, support created_at, to_date"
           }
         ]
       },
