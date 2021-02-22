@@ -291,7 +291,7 @@
                 "properties": {
                   "network_id": {
                     "type": "string",
-                    "example": 1,
+                    "example": "1",
                     "description": "Network Id",
                     "minLength": 1,
                     "maxLength": 11
@@ -336,7 +336,7 @@
               "examples": {
                 "example": {
                   "value": {
-                    "network_id": 1,
+                    "network_id": "1",
                     "merchant_codes": [
                       "vnshop_online"
                     ],
