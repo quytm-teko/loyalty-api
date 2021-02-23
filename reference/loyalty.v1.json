@@ -397,8 +397,8 @@
                 "examples": {
                   "example": {
                     "value": {
-                      "code": "string",
-                      "message": "string",
+                      "code": "00",
+                      "message": "Success",
                       "result": {
                         "reconciliation_reports": [
                           {
@@ -417,10 +417,10 @@
                         ]
                       },
                       "extra": {
-                        "current_page": 0,
-                        "total_page": 0,
-                        "total_items": 0,
-                        "page_size": 0
+                        "current_page": 1,
+                        "total_page": 2,
+                        "total_items": 15,
+                        "page_size": 10
                       }
                     }
                   }
@@ -2206,14 +2206,6 @@
             "in": "query",
             "name": "status",
             "description": "Filter by Status. 1 (Initiated), 2(Init failed), 3(No accounting), 4(Accounting success), 5(Accounting failed)"
-          },
-          {
-            "schema": {
-              "type": "boolean"
-            },
-            "in": "query",
-            "name": "is_reconciliation",
-            "description": "Filter by Reconciliation status "
           },
           {
             "schema": {
