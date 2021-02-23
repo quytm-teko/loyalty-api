@@ -245,24 +245,18 @@
                     "message": {
                       "type": "string",
                       "minLength": 1
-                    },
-                    "result": {
-                      "type": "number",
-                      "description": "Số yêu cầu đối soát được tạo (tương ứng với số merchant gửi lên)"
                     }
                   },
                   "required": [
                     "code",
-                    "message",
-                    "result"
+                    "message"
                   ]
                 },
                 "examples": {
                   "created-success": {
                     "value": {
                       "code": "00",
-                      "message": "Success",
-                      "result": 5
+                      "message": "Success"
                     }
                   }
                 }
@@ -536,7 +530,7 @@
             },
             "in": "query",
             "name": "sort",
-            "description": "Sort by field, support created_at, to_date"
+            "description": "Sort by field, support updated_at, to_date"
           }
         ]
       },
@@ -2352,7 +2346,8 @@
           "created_by",
           "updated_at",
           "updated_by"
-        ]
+        ],
+        "title": ""
       },
       "TierConfig": {
         "description": "Model trả về thông tin của Tier Config",
