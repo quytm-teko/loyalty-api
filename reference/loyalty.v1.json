@@ -301,7 +301,7 @@
                     "example": [
                       "vnshop_online"
                     ],
-                    "description": "Merchant Code",
+                    "description": "Merchant Codes",
                     "minItems": 1,
                     "maxItems": 50,
                     "items": {
@@ -329,7 +329,6 @@
                 "required": [
                   "network_id",
                   "merchant_codes",
-                  "from_date",
                   "to_date"
                 ]
               },
