@@ -2286,7 +2286,7 @@
         "x-examples": {
           "example-1": {
             "id": 1,
-            "name": "reconciliation",
+            "name": "reconciliation.xlsx",
             "from_date": 1612860751693,
             "to_date": 1612860751693,
             "status": "RECONCILIATION",
