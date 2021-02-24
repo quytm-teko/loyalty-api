@@ -906,11 +906,14 @@
                 "type": "object",
                 "properties": {
                   "network_id": {
-                    "type": "number"
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 11
                   },
                   "description": {
                     "type": "string",
-                    "minLength": 1
+                    "minLength": 1,
+                    "maxLength": 200
                   },
                   "cycle_type": {
                     "type": "string",
