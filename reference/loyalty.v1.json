@@ -910,11 +910,6 @@
                     "minLength": 1,
                     "maxLength": 11
                   },
-                  "description": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 200
-                  },
                   "cycle_type": {
                     "type": "string",
                     "minLength": 1
@@ -922,36 +917,81 @@
                   "period": {
                     "type": "number"
                   },
-                  "start_cycle_day": {
-                    "type": "number"
-                  },
                   "amount_rate": {
                     "type": "number"
                   },
                   "point_rate": {
                     "type": "number"
+                  },
+                  "tiers": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "minItems": 1,
+                    "items": {
+                      "type": "object",
+                      "minProperties": 1,
+                      "maxProperties": 20,
+                      "properties": {
+                        "code": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "name": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "from_point": {
+                          "type": "number"
+                        },
+                        "keep_tier_time": {
+                          "type": "number"
+                        },
+                        "keep_tier_rule": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "name",
+                        "from_point",
+                        "keep_tier_time",
+                        "keep_tier_rule"
+                      ]
+                    }
                   }
                 },
                 "required": [
                   "network_id",
-                  "description",
                   "cycle_type",
                   "period",
-                  "start_cycle_day",
-                  "amount_rate",
-                  "point_rate"
+                  "tiers"
                 ]
               },
               "examples": {
-                "example-1": {
+                "example": {
                   "value": {
                     "network_id": 1,
-                    "description": "Tier config for Dino",
                     "cycle_type": "MONTH",
                     "period": 6,
-                    "start_cycle_day": 1611634987499,
                     "amount_rate": 10000,
-                    "point_rate": 1
+                    "point_rate": 1,
+                    "tiers": [
+                      {
+                        "code": "SILVER",
+                        "name": "Hạng Bạc",
+                        "from_point": 1,
+                        "keep_tier_time": 6,
+                        "keep_tier_rule": "RESET"
+                      },
+                      {
+                        "code": "GOLD",
+                        "name": "Hạng Vàng",
+                        "to_point": 10,
+                        "keep_tier_time": 6,
+                        "keep_tier_rule": "RESET"
+                      }
+                    ]
                   }
                 }
               }
@@ -1201,7 +1241,8 @@
             }
           }
         },
-        "description": "Cập nhật Tier config cho network"
+        "description": "Cập nhật Tier config cho network",
+        "deprecated": true
       }
     },
     "/admin/v1/tier-configs/{id}/tiers": {
