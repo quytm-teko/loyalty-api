@@ -900,7 +900,24 @@
                           "created_at": 1611634987499,
                           "updated_at": 1611634987499,
                           "created_by": "quy.tm@teko.vn",
-                          "updated_by": "quy.tm@teko.vn"
+                          "updated_by": "quy.tm@teko.vn",
+                          "tiers": [
+                            {
+                              "code": "GOLD",
+                              "network_id": 1,
+                              "name": "Hạng Vàng",
+                              "description": "Thành viên hạng Vàng",
+                              "status": 1,
+                              "from_point": 1,
+                              "to_point": 10,
+                              "keep_tier_time": 6,
+                              "keep_tier_rule": "RESET",
+                              "created_at": 1611634987499,
+                              "updated_at": 1611634987499,
+                              "created_by": "quy.tm@teko.vn",
+                              "updated_by": "quy.tm@teko.vn"
+                            }
+                          ]
                         }
                       }
                     }
