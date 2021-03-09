@@ -1038,7 +1038,7 @@
                         "from_point": {
                           "type": "string",
                           "description": "Điểm tối thiểu để đạt hạng",
-                          "example": 100,
+                          "example": "100",
                           "pattern": "^[0-9]+$",
                           "minLength": 1,
                           "maxLength": 11
@@ -1080,23 +1080,23 @@
               "examples": {
                 "example": {
                   "value": {
-                    "network_id": 1,
+                    "network_id": "1",
                     "cycle_type": "MONTH",
                     "period": 6,
-                    "amount_rate": 10000,
+                    "amount_rate": 100,
                     "point_rate": 1,
                     "tiers": [
                       {
                         "code": "SILVER",
                         "name": "Hạng Bạc",
-                        "from_point": 1,
+                        "from_point": "1",
                         "keep_tier_time": 6,
                         "keep_tier_rule": "RESET"
                       },
                       {
                         "code": "GOLD",
                         "name": "Hạng Vàng",
-                        "to_point": 10,
+                        "from_point": "10",
                         "keep_tier_time": 6,
                         "keep_tier_rule": "RESET"
                       }
@@ -1185,7 +1185,24 @@
                           "created_at": 1611634987499,
                           "updated_at": 1611634987499,
                           "created_by": "quy.tm@teko.vn",
-                          "updated_by": "quy.tm@teko.vn"
+                          "updated_by": "quy.tm@teko.vn",
+                          "tiers": [
+                            {
+                              "code": "GOLD",
+                              "network_id": 1,
+                              "name": "Hạng Vàng",
+                              "description": "Thành viên hạng Vàng",
+                              "status": 1,
+                              "from_point": 1,
+                              "to_point": 10,
+                              "keep_tier_time": 6,
+                              "keep_tier_rule": "RESET",
+                              "created_at": 1611634987499,
+                              "updated_at": 1611634987499,
+                              "created_by": "quy.tm@teko.vn",
+                              "updated_by": "quy.tm@teko.vn"
+                            }
+                          ]
                         }
                       }
                     }
@@ -1413,19 +1430,19 @@
                       "result": {
                         "tiers": [
                           {
-                            "network_id": 0,
-                            "code": "string",
-                            "name": "string",
-                            "description": "string",
-                            "status": 0,
-                            "from_point": 0,
-                            "to_point": 0,
-                            "keep_tier_time": 0,
-                            "keep_tier_rule": "string",
-                            "created_at": 0,
-                            "updated_at": 0,
-                            "created_by": "string",
-                            "updated_by": "string"
+                            "code": "GOLD",
+                            "network_id": 1,
+                            "name": "Hạng Vàng",
+                            "description": "Thành viên hạng Vàng",
+                            "status": 1,
+                            "from_point": 1,
+                            "to_point": 10,
+                            "keep_tier_time": 6,
+                            "keep_tier_rule": "RESET",
+                            "created_at": 1611634987499,
+                            "updated_at": 1611634987499,
+                            "created_by": "quy.tm@teko.vn",
+                            "updated_by": "quy.tm@teko.vn"
                           }
                         ]
                       },
