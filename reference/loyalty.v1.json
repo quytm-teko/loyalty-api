@@ -985,7 +985,7 @@
                     "example": "MONTH",
                     "maxLength": 10
                   },
-                  "period": {
+                  "cycle_period": {
                     "type": "number",
                     "description": "Độ dài chu kỳ xét hạng",
                     "minimum": 1,
@@ -1069,7 +1069,7 @@
                 "required": [
                   "network_id",
                   "cycle_type",
-                  "period",
+                  "cycle_period",
                   "tiers"
                 ]
               },
@@ -2628,6 +2628,7 @@
             "name": "Hạng Vàng",
             "status": 1,
             "from_point": 1,
+            "keep_tier_cycle_type": "MONTH",
             "keep_tier_time": 6,
             "keep_tier_rule": "RESET",
             "created_at": 1611634987499,
@@ -2658,6 +2659,16 @@
           "from_point": {
             "type": "number",
             "description": "Điểm tối thiểu để đạt hạng"
+          },
+          "keep_tier_cycle_type": {
+            "type": "string",
+            "description": "Loại chu kỳ xét hạng theo DAY, MONTH, YEAR",
+            "enum": [
+              "DAY",
+              "MONTH",
+              "YEAR"
+            ],
+            "example": "MONTH"
           },
           "keep_tier_time": {
             "type": "number",
