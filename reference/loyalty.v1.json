@@ -908,25 +908,49 @@
                   "network_id": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 11
+                    "maxLength": 11,
+                    "description": "Network Id",
+                    "pattern": "^[0-9]+$",
+                    "example": "1"
                   },
                   "cycle_type": {
                     "type": "string",
-                    "minLength": 1
+                    "minLength": 1,
+                    "description": "Loại chu kỳ xét hạng theo DAY, MONTH, YEAR",
+                    "enum": [
+                      "DAY",
+                      "MONTH",
+                      "YEAR"
+                    ],
+                    "example": "MONTH",
+                    "maxLength": 10
                   },
                   "period": {
-                    "type": "number"
+                    "type": "number",
+                    "description": "Độ dài chu kỳ xét hạng",
+                    "minimum": 1,
+                    "example": 6,
+                    "maximum": 100
                   },
                   "amount_rate": {
-                    "type": "number"
+                    "type": "number",
+                    "description": "Điểm xét hạng tính theo phần trăm (%) giá trị đơn hàng (Order Amount)",
+                    "example": 1.5,
+                    "minimum": 0,
+                    "maximum": 100
                   },
                   "point_rate": {
-                    "type": "number"
+                    "type": "number",
+                    "description": "Điểm xét hạng tính theo điểm khách hàng được tích",
+                    "example": 0.8,
+                    "minimum": 0,
+                    "maximum": 1
                   },
                   "tiers": {
                     "type": "array",
                     "uniqueItems": true,
                     "minItems": 1,
+                    "description": "Danh sách hạng thành viên",
                     "items": {
                       "type": "object",
                       "minProperties": 1,
@@ -934,21 +958,42 @@
                       "properties": {
                         "code": {
                           "type": "string",
-                          "minLength": 1
+                          "minLength": 1,
+                          "description": "Mã hạng thành viên",
+                          "example": "GOLD",
+                          "pattern": "^[a-zA-Z\\d_-]+$",
+                          "maxLength": 50
                         },
                         "name": {
                           "type": "string",
-                          "minLength": 1
+                          "minLength": 1,
+                          "description": "Tên hiển thị cho hạng thành viên",
+                          "example": "Thành viên hạng Vàng",
+                          "maxLength": 50
                         },
                         "from_point": {
-                          "type": "number"
+                          "type": "string",
+                          "description": "Điểm tối thiểu để đạt hạng",
+                          "example": 100,
+                          "pattern": "^[0-9]+$",
+                          "minLength": 1,
+                          "maxLength": 11
                         },
                         "keep_tier_time": {
-                          "type": "number"
+                          "type": "integer",
+                          "description": "Thời gian giữ hạng",
+                          "minimum": 1,
+                          "maximum": 100
                         },
                         "keep_tier_rule": {
                           "type": "string",
-                          "minLength": 1
+                          "minLength": 1,
+                          "description": "Cách thức xét giữ hạng",
+                          "enum": [
+                            "RESET",
+                            "HAS_ORDER"
+                          ],
+                          "example": "RESET"
                         }
                       },
                       "required": [
@@ -2388,6 +2433,24 @@
       "TierConfig": {
         "description": "Model trả về thông tin của Tier Config",
         "type": "object",
+        "x-examples": {
+          "example": {
+            "network_id": 1,
+            "network_name": "Dino",
+            "description": "Tier config for Dino",
+            "status": 1,
+            "cycle_type": "MONTH",
+            "period": 6,
+            "start_cycle_day": 1611634987499,
+            "amount_rate": 10000,
+            "point_rate": 1,
+            "created_at": 1611634987499,
+            "updated_at": 1611634987499,
+            "created_by": "quy.tm@teko.vn",
+            "updated_by": "quy.tm@teko.vn",
+            "tiers": []
+          }
+        },
         "properties": {
           "network_id": {
             "type": "number"
@@ -2436,6 +2499,12 @@
           },
           "updated_by": {
             "type": "string"
+          },
+          "tiers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tier"
+            }
           }
         },
         "required": [
@@ -2453,23 +2522,7 @@
           "created_by",
           "updated_by"
         ],
-        "x-examples": {
-          "example": {
-            "network_id": 1,
-            "network_name": "Dino",
-            "description": "Tier config for Dino",
-            "status": 1,
-            "cycle_type": "MONTH",
-            "period": 6,
-            "start_cycle_day": 1611634987499,
-            "amount_rate": 10000,
-            "point_rate": 1,
-            "created_at": 1611634987499,
-            "updated_at": 1611634987499,
-            "created_by": "quy.tm@teko.vn",
-            "updated_by": "quy.tm@teko.vn"
-          }
-        }
+        "title": ""
       },
       "Tier": {
         "description": "",
