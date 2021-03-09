@@ -2587,7 +2587,8 @@
             "example": "MONTH"
           },
           "period": {
-            "type": "number"
+            "type": "number",
+            "description": "Độ dài chu kỳ xét hạng"
           },
           "start_cycle_day": {
             "description": "Ngày bắt đầu chu kỳ phân hạng. Timestamp UTC+0",
@@ -2644,30 +2645,45 @@
       "Tier": {
         "description": "",
         "type": "object",
+        "x-examples": {
+          "example-1": {
+            "code": "GOLD",
+            "network_id": 1,
+            "name": "Hạng Vàng",
+            "description": "Thành viên hạng Vàng",
+            "status": 1,
+            "from_point": 1,
+            "to_point": 10,
+            "keep_tier_time": 6,
+            "keep_tier_rule": "RESET",
+            "created_at": 1611634987499,
+            "updated_at": 1611634987499,
+            "created_by": "quy.tm@teko.vn",
+            "updated_by": "quy.tm@teko.vn"
+          }
+        },
         "properties": {
           "network_id": {
-            "type": "number"
+            "type": "number",
+            "description": "Network id"
           },
           "code": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Mã hạng thành viên"
           },
           "name": {
             "type": "string",
-            "minLength": 1
-          },
-          "description": {
-            "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Tên hiển thị hạng thành viên"
           },
           "status": {
-            "type": "number"
+            "type": "string",
+            "description": "Trạng thái hạng thành viên.\nACTIVE\nINACTIVE"
           },
           "from_point": {
-            "type": "number"
-          },
-          "to_point": {
-            "type": "number"
+            "type": "number",
+            "description": "Điểm tối thiểu để đạt hạng"
           },
           "keep_tier_time": {
             "type": "number"
@@ -2695,34 +2711,15 @@
           "network_id",
           "code",
           "name",
-          "description",
           "status",
           "from_point",
-          "to_point",
           "keep_tier_time",
           "keep_tier_rule",
           "created_at",
           "updated_at",
           "created_by",
           "updated_by"
-        ],
-        "x-examples": {
-          "example-1": {
-            "code": "GOLD",
-            "network_id": 1,
-            "name": "Hạng Vàng",
-            "description": "Thành viên hạng Vàng",
-            "status": 1,
-            "from_point": 1,
-            "to_point": 10,
-            "keep_tier_time": 6,
-            "keep_tier_rule": "RESET",
-            "created_at": 1611634987499,
-            "updated_at": 1611634987499,
-            "created_by": "quy.tm@teko.vn",
-            "updated_by": "quy.tm@teko.vn"
-          }
-        }
+        ]
       },
       "TxnSpendPoint": {
         "description": "Response for api get spend point txn",
