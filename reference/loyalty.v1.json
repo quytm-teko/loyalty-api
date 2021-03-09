@@ -794,10 +794,8 @@
                                 "code": "GOLD",
                                 "network_id": 1,
                                 "name": "Hạng Vàng",
-                                "description": "Thành viên hạng Vàng",
                                 "status": "ACTIVE",
                                 "from_point": 1,
-                                "to_point": 10,
                                 "keep_tier_time": 6,
                                 "keep_tier_rule": "RESET",
                                 "created_at": 1611634987499,
@@ -1593,9 +1591,7 @@
                 "required": [
                   "code",
                   "name",
-                  "description",
                   "from_point",
-                  "to_point",
                   "keep_tier_time",
                   "keep_tier_rule"
                 ]
@@ -1605,10 +1601,8 @@
                   "value": {
                     "code": "GOLD",
                     "name": "Hạng Vàng",
-                    "description": "Thành viên hạng Vàng",
                     "status": 1,
                     "from_point": 1,
-                    "to_point": 10,
                     "keep_tier_time": 6,
                     "keep_tier_rule": "RESET"
                   }
@@ -1869,10 +1863,8 @@
                 },
                 "required": [
                   "name",
-                  "description",
                   "status",
                   "from_point",
-                  "to_point",
                   "keep_tier_time",
                   "keep_tier_rule"
                 ]
@@ -1881,10 +1873,8 @@
                 "example-1": {
                   "value": {
                     "name": "Hạng Vàng",
-                    "description": "Thành viên hạng Vàng",
                     "status": 1,
                     "from_point": 1,
-                    "to_point": 10,
                     "keep_tier_time": 6,
                     "keep_tier_rule": "RESET"
                   }
@@ -2529,10 +2519,8 @@
                 "code": "GOLD",
                 "network_id": 1,
                 "name": "Hạng Vàng",
-                "description": "Thành viên hạng Vàng",
                 "status": 1,
                 "from_point": 1,
-                "to_point": 10,
                 "keep_tier_time": 6,
                 "keep_tier_rule": "RESET",
                 "created_at": 1611634987499,
@@ -2638,10 +2626,8 @@
             "code": "GOLD",
             "network_id": 1,
             "name": "Hạng Vàng",
-            "description": "Thành viên hạng Vàng",
             "status": 1,
             "from_point": 1,
-            "to_point": 10,
             "keep_tier_time": 6,
             "keep_tier_rule": "RESET",
             "created_at": 1611634987499,
