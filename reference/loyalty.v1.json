@@ -779,7 +779,7 @@
                             "network_id": 1,
                             "network_name": "Dino",
                             "description": "Tier config for Dino",
-                            "status": 1,
+                            "status": "ACTIVE",
                             "cycle_type": "MONTH",
                             "period": 6,
                             "start_cycle_day": 1611634987499,
@@ -908,7 +908,7 @@
                           "network_id": 1,
                           "network_name": "Dino",
                           "description": "Tier config for Dino",
-                          "status": 1,
+                          "status": "ACTIVE",
                           "cycle_type": "MONTH",
                           "period": 6,
                           "start_cycle_day": 1611634987499,
@@ -1176,7 +1176,7 @@
                           "network_id": 1,
                           "network_name": "Dino",
                           "description": "Tier config for Dino",
-                          "status": 1,
+                          "status": "ACTIVE",
                           "cycle_type": "MONTH",
                           "period": 6,
                           "start_cycle_day": 1611634987499,
@@ -1284,7 +1284,7 @@
                           "network_id": 1,
                           "network_name": "Dino",
                           "description": "Tier config for Dino",
-                          "status": 1,
+                          "status": "ACTIVE",
                           "cycle_type": "MONTH",
                           "period": 6,
                           "start_cycle_day": 1611634987499,
@@ -2526,7 +2526,7 @@
             "network_id": 1,
             "network_name": "Dino",
             "description": "Tier config for Dino",
-            "status": 1,
+            "status": "ACTIVE",
             "cycle_type": "MONTH",
             "period": 6,
             "start_cycle_day": 1611634987499,
@@ -2555,24 +2555,36 @@
             ]
           }
         },
+        "title": "",
         "properties": {
           "network_id": {
-            "type": "number"
+            "type": "number",
+            "description": "Network Id"
           },
           "network_name": {
             "type": "string",
-            "minLength": 1
-          },
-          "description": {
-            "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Tên Network"
           },
           "status": {
-            "type": "number"
+            "type": "string",
+            "description": "Trạng thái config. \nACTIVE - Hoạt động\nINACTIVE - Không hoạt động",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ],
+            "example": "ACTIVE"
           },
           "cycle_type": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Loại chu kỳ xét hạng: DAY, MONTH, YEAR",
+            "enum": [
+              "DAY",
+              "MONTH",
+              "YEAR"
+            ],
+            "example": "MONTH"
           },
           "period": {
             "type": "number"
@@ -2599,13 +2611,16 @@
             "description": "Timestamp UTC+0"
           },
           "created_by": {
-            "type": "string"
+            "type": "string",
+            "description": "Người tạo"
           },
           "updated_by": {
-            "type": "string"
+            "type": "string",
+            "description": "Người cập nhật"
           },
           "tiers": {
             "type": "array",
+            "description": "Danh sách hạng thành viên",
             "items": {
               "$ref": "#/components/schemas/Tier"
             }
@@ -2614,7 +2629,6 @@
         "required": [
           "network_id",
           "network_name",
-          "description",
           "status",
           "cycle_type",
           "period",
@@ -2625,8 +2639,7 @@
           "updated_at",
           "created_by",
           "updated_by"
-        ],
-        "title": ""
+        ]
       },
       "Tier": {
         "description": "",
