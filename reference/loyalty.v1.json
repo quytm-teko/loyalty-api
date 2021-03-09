@@ -2686,25 +2686,35 @@
             "description": "Điểm tối thiểu để đạt hạng"
           },
           "keep_tier_time": {
-            "type": "number"
+            "type": "number",
+            "description": "Thời gian giữ hạng"
           },
           "keep_tier_rule": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Cách thức xét giữ hạng",
+            "enum": [
+              "RESET",
+              "HAS_ORDER"
+            ]
           },
           "created_at": {
-            "type": "number"
+            "type": "number",
+            "description": "Thời gian tạo (timestamp)"
           },
           "updated_at": {
-            "type": "number"
+            "type": "number",
+            "description": "Thời gian cập nhật (timestamp)"
           },
           "created_by": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Người tạo"
           },
           "updated_by": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Người cập nhật"
           }
         },
         "required": [
