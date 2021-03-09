@@ -808,6 +808,36 @@
           {
             "Authorization": []
           }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "example": 1
+            },
+            "in": "query",
+            "name": "page",
+            "description": "Page index"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "example": 10
+            },
+            "in": "query",
+            "name": "size",
+            "description": "Page size"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "sort",
+            "description": "Sort"
+          }
         ]
       },
       "post": {
@@ -1046,16 +1076,20 @@
         "description": "Tạo cấu hình Tier cho network"
       }
     },
-    "/admin/v1/tier-configs/{id}": {
+    "/admin/v1/tier-configs/{network_id}": {
       "parameters": [
         {
           "schema": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\d_-]+$",
+            "minLength": 1,
+            "maxLength": 11,
+            "example": "1"
           },
-          "name": "id",
+          "name": "network_id",
           "in": "path",
           "required": true,
-          "description": "Id của config (network_id)"
+          "description": "Network Id"
         }
       ],
       "get": {
@@ -1290,7 +1324,7 @@
         "deprecated": true
       }
     },
-    "/admin/v1/tier-configs/{id}/tiers": {
+    "/admin/v1/tier-configs/{network_id}/tiers": {
       "get": {
         "summary": "Lấy danh sách các Hạng thành viên của 1 network",
         "tags": [
@@ -1390,16 +1424,7 @@
             "Authorization": []
           }
         ],
-        "parameters": [
-          {
-            "schema": {
-              "type": "number"
-            },
-            "in": "query",
-            "name": "network_id",
-            "description": "Network id"
-          }
-        ]
+        "parameters": []
       },
       "post": {
         "summary": "Tạo Hạng thành viên cho network",
@@ -1548,34 +1573,45 @@
               }
             }
           }
-        }
+        },
+        "deprecated": true
       },
       "parameters": [
         {
           "schema": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[0-9]+$",
+            "minLength": 1,
+            "maxLength": 11,
+            "example": "1"
           },
-          "name": "id",
+          "name": "network_id",
           "in": "path",
           "required": true,
-          "description": "Id của Tier config (network_id)"
+          "description": "Network Id"
         }
       ]
     },
-    "/admin/v1/tier-configs/{id}/tiers/{code}": {
+    "/admin/v1/tier-configs/{network_id}/tiers/{code}": {
       "parameters": [
         {
           "schema": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[0-9]+$",
+            "minLength": 1,
+            "maxLength": 11
           },
-          "name": "id",
+          "name": "network_id",
           "in": "path",
           "required": true,
-          "description": "Id của Tier config"
+          "description": "Network Id"
         },
         {
           "schema": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\d_-]+$",
+            "minLength": 1,
+            "maxLength": 50
           },
           "name": "code",
           "in": "path",
@@ -1817,7 +1853,8 @@
               }
             }
           }
-        }
+        },
+        "deprecated": true
       }
     },
     "/admin/v2/transactions/spend-points": {
